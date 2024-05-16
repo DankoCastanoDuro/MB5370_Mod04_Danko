@@ -468,21 +468,28 @@ table3
 table3.1 <- table3 %>%
   separate(rate, into = c("cases", "population"), sep = "/")
 
-
-
-#b. Extract the matching population per country per year
-
-table2.1
+print(table3.1)
 
 
 
-table3.1
 
 
 #c. Divide cases by population, and multiply by 10,000
 
+table2.2 <- table2.1 %>%
+  mutate(rate_per_10000 = (cases / population) * 10000)
 
-#d. Store back in the appropriate place
+print(table2.2)
+
+
+table3.2 <- table3.1 %>%
+  mutate(cases = as.numeric(cases),
+         population = as.numeric(population))
+
+table3.2extra <- table3.2 %>%
+  mutate(rate_per_10000 = (cases / population) * 10000)
+
+print(table3.2extra)
 
 
 #Hint: you haven’t yet learned the functions you need to actually perform these, but you can
@@ -502,10 +509,22 @@ stocks <- tibble(
   half = c( 1, 2, 1, 2),
   return = c(1.88, 0.59, 0.92, 0.17)
 )
+
 stocks %>%
   pivot_wider(names_from = year, values_from = return) %>%
   pivot_longer(`2015`:`2016`, names_to = "year", values_to =
                  "return")
+
+
+#Explanation
+#Column Types: When you use pivot_wider(), it creates new column names based on the values of names_from (in this case, year). These new column names are of type character. When you use pivot_longer(), it treats these column names as character strings, so the year column in the resulting tibble is of type character.
+#Column Order: The order of columns may change based on how pivot_longer() and pivot_wider() manipulate the data. While this does not affect the data content, it does affect the column arrangement.
+
+
+#Making Transformations Symmetrical
+#To make the transformations more symmetrical, 
+#you need to ensure that the data types and structures are consistent. You can convert the year column back to numeric after using pivot_longer():
+
 
 #2. Why does this code fail?
 
