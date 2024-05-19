@@ -1,0 +1,87 @@
+#Assignment. End-to-end data analysis in R. In this assignment, we will use real-world marine data collected as part of Queensland fisheries QFISH database to develop a report (either written on your website or via an R Markdown report embedded in your website) suitable for reporting to your manager, a community group or for your own research.
+
+
+#Part 1. First, obtain your data.
+
+#ALL DONE
+
+#Part 2. Tidy the data.
+
+```{r}
+library(tidyverse)
+```
+
+#data successfully download in an "organized way"
+
+#Open dataset
+
+```{r}
+
+file_path <- file.path("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko", "shark.csv")
+
+shark <- read_csv(file_path)
+
+View(shark)
+
+```
+
+#Clean data
+#Delete all rows that have the word "total..."
+```{r}
+library(dplyr)
+
+rows_with_total <- apply(shark, 1, function(row) any(grepl("total", row, ignore.case = TRUE)))
+
+shark_cleaned <- shark[!rows_with_total, ]
+
+view(shark_cleaned)
+```
+#Explanation
+#apply(shark, 1, function(row) ...): This applies the function to each row (MARGIN = 1) of the data frame shark.
+
+#grepl("total", row, ignore.case = TRUE): This checks if the word "total" (case insensitive) is present in any element of the row.
+
+#any(grepl(...)): This returns TRUE if any element in the row contains the word "total".
+
+#rows_with_total: This logical vector indicates which rows contain the word "total".
+
+#shark[!rows_with_total, ]: This subsets the data frame to include only rows that do not contain the word "total".
+
+
+#Check structure of data set
+```{r}
+str(shark_cleaned)
+```
+
+
+#Plot data
+
+# Filter the data by Making new tiny datset
+```{r}
+just_shark_Townsville <- shark_cleaned %>% filter(Area == "Townsville" & SpeciesGroup == "Shark")
+view(just_shark_Townsville)
+```
+
+#Plot the dataset 
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+ggplot(just_shark_Townsville, aes(x = CalendarYear), y = NumberCaught_Total, color = SpeciesGroup) +
+  geom_boxplot() +
+  labs(title = "Shark Areas by Year Townsville", x = "Year", y = "Area") +
+  theme_minimal()
+  
+```
+
+library(ggplot2)
+
+ggplot(shark_cleaned, aes(x = as.factor(CalendarYear), y = Area, color = SpeciesGroup)) +
+  geom_boxplot() +
+  labs(title = "Shark Areas by Year and Species Group", x = "Year", y = "Area") +
+  theme_minimal()
+
+
+
+
