@@ -19,9 +19,8 @@ library(tidyverse)
 
 setwd("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko")
 
-file_path <- file.path("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko", "shark.csv")
 
-shark <- read_csv(file_path)
+shark <- read_csv("shark.csv")
 
 View(shark)
 
@@ -68,6 +67,9 @@ view(just_shark_Townsville)
 ```
 
 #Plot the dataset 
+
+
+
 ```{r}
 library(tidyverse)
 library(dplyr)
@@ -75,7 +77,7 @@ library(ggplot2)
 
 ggplot(just_shark_Townsville, aes(x = CalendarYear), y = NumberCaught_Total, color = SpeciesGroup) +
   geom_boxplot() +
-  labs(title = "Shark Areas by Year Townsville", x = "Year", y = "Area") +
+  labs(title = "Shark Areas by Year Townsville", x = "Year", y = "NumberCaught_Total") +
   theme_minimal()
   
 
