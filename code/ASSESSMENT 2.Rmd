@@ -1,0 +1,108 @@
+---
+title: "Assessment 2"
+author: "Danko Castaño Duro"
+date: "2024-05-19"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Assignment. End-to-end data analysis in R. In this assignment, we will use real-world marine data collected as part of Queensland fisheries QFISH database to develop a report (either written on your website or via an R Markdown report embedded in your website) suitable for reporting to your manager, a community group or for your own research.
+
+# First, obtain your data.
+
+#ALL DONE #Open dataset
+
+```{r}
+
+setwd("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko")
+
+
+shark <- read.csv("shark.csv")
+
+View(shark)
+```
+
+# Clean data
+
+#Delete all rows that have the word "total..."
+
+```{r}
+library(dplyr)
+library(tidyverse)
+
+rows_with_total <- apply(shark, 1, function(row) any(grepl("total", row, ignore.case = TRUE)))
+
+shark_cleaned <- shark[!rows_with_total, ]
+
+view(shark_cleaned)
+```
+
+#Explanation #apply(shark, 1, function(row) ...): This applies the function to each row (MARGIN = 1) of the data frame shark.
+
+#grepl("total", row, ignore.case = TRUE): This checks if the word "total" (case insensitive) is present in any element of the row.
+
+#any(grepl(...)): This returns TRUE if any element in the row contains the word "total".
+
+#rows_with_total: This logical vector indicates which rows contain the word "total".
+
+#shark[!rows_with_total, ]: This subsets the data frame to include only rows that do not contain the word "total".
+
+# Check structure of data set
+
+```{r}
+str(shark_cleaned)
+```
+
+# Plot data
+
+#Filter the data by Making new tiny datset
+
+```{r}
+just_shark_Townsville <- shark_cleaned %>%
+  filter(Area == "Townsville", SpeciesGroup == "Shark", CalendarYear >= "2014", CalendarYear <= "2024")
+view(just_shark_Townsville)
+
+```
+
+#Plot the "easy" dataset
+
+```{r}
+str(just_shark_Townsville)
+```
+
+```{r}
+ggplot(data = just_shark_Townsville, aes(x = CalendarYear, y = NumberCaught.Total)) +
+  geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+  labs(x = "Year", y = "Number of Sharks Caught", title = "Total Number of Sharks Caught in Townsville by Year") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+```
+
+#Plot for all species in townsvile
+
+#Filter data
+
+```{r}
+just_Townsville <- shark_cleaned %>%
+  filter(Area =="Townsville", CalendarYear >="2014", CalendarYear <= "2024")
+
+view(just_Townsville)
+
+```
+
+# Plot FINAL data
+
+```{r}
+ggplot(data = just_Townsville, aes(x = CalendarYear, y = NumberCaught.Total, fill = SpeciesGroup)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  geom_text(aes(label = NumberCaught.Total), position = position_dodge(width = 0.9), vjust = -0.5) +
+  labs(x = "Year", y = "Number of Caught", title = "Total Number of Groups Caugth in Townsville from 2014-2024") +
+  scale_fill_manual(values = c("Shark" = "blue", "Turtle" = "green", "Other" = "white")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+```
+
+#Final just_Townsville plot displays the Number of Caught Groups on Townsville from 2014 to 2024
