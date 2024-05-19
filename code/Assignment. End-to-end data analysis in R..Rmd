@@ -17,6 +17,8 @@ library(tidyverse)
 
 ```{r}
 
+setwd("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko")
+
 file_path <- file.path("C:/Users/Danko Castaño Duro/Desktop/Australia 3 semestre/Modulos 1/INTRODUCTION TO R 4/MB5370_Mod04_Danko/MB5370_Mod04_Danko", "shark.csv")
 
 shark <- read_csv(file_path)
@@ -58,8 +60,11 @@ str(shark_cleaned)
 
 # Filter the data by Making new tiny datset
 ```{r}
-just_shark_Townsville <- shark_cleaned %>% filter(Area == "Townsville" & SpeciesGroup == "Shark")
+just_shark_Townsville <- shark_cleaned %>%
+  filter(Area == "Townsville", SpeciesGroup == "Shark", CalendarYear >= "2014", CalendarYear <= "2024")
 view(just_shark_Townsville)
+
+
 ```
 
 #Plot the dataset 
@@ -73,6 +78,7 @@ ggplot(just_shark_Townsville, aes(x = CalendarYear), y = NumberCaught_Total, col
   labs(title = "Shark Areas by Year Townsville", x = "Year", y = "Area") +
   theme_minimal()
   
+
 ```
 
 library(ggplot2)
